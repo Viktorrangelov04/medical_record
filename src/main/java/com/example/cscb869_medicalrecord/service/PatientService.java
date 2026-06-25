@@ -56,7 +56,8 @@ public class PatientService {
     private void applyRequest(Patient patient, PatientRequest request) {
         Doctor doctor = doctorRepository.findById(request.doctorId())
                 .orElseThrow(() -> new RuntimeException("Doctor not found: " + request.doctorId()));
-        patient.setName(request.name());
+        patient.setFirstName(request.firstName());
+        patient.setLastName(request.lastName());
         patient.setSsn(request.ssn());
         patient.setDoctor(doctor);
         patient.setInsuranceStatus(request.insuranceStatus());
@@ -65,10 +66,12 @@ public class PatientService {
     private PatientResponse toResponse(Patient p) {
         return new PatientResponse(
                 p.getId(),
-                p.getName(),
+                p.getFirstName(),
+                p.getLastName(),
+                p.getFullName(),
                 p.getSsn(),
                 p.getDoctor().getId(),
-                p.getDoctor().getName(),
+                p.getDoctor().getFirstName(),
                 p.getInsuranceStatus()
         );
     }

@@ -1,5 +1,6 @@
 package com.example.cscb869_medicalrecord.entity;
 
+import com.example.cscb869_medicalrecord.enums.Payer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name="visitations")
-public class Visitations extends org.example.entity.BaseEntity {
+public class Visitation extends org.example.entity.BaseEntity {
     @Column(nullable = false)
-    private LocalDate visitationDate;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name="doctor_id", nullable = false)
@@ -33,12 +34,10 @@ public class Visitations extends org.example.entity.BaseEntity {
     private String treatment;
 
     @Column(nullable = false)
-    private BigDecimal totalCost;
+    private BigDecimal price;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BigDecimal pricePaidByPatient;
-
-    @Column(nullable = false)
-    private BigDecimal pricePaidByNzok;
+    private Payer payer;
 
 }

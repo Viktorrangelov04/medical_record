@@ -12,8 +12,11 @@ import lombok.Setter;
 @Entity
 @Table(name="patients")
 public class Patient extends org.example.entity.BaseEntity {
-    @Column(nullable=false)
-    private String name;
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Column(nullable = false, unique = true, length = 10)
     private String ssn;
@@ -27,5 +30,7 @@ public class Patient extends org.example.entity.BaseEntity {
     private HealthInsuranceStatus insuranceStatus;
 
 
-
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

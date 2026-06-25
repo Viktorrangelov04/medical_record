@@ -16,9 +16,14 @@ import java.util.Set;
 @Table(name="doctor")
 public class Doctor extends org.example.entity.BaseEntity {
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
     @Column(nullable = false, unique = true, length = 10)
     private String uin;
+
     @ManyToMany
     @JoinTable(
             name = "doctors_specialties",
@@ -30,5 +35,7 @@ public class Doctor extends org.example.entity.BaseEntity {
 
     private BigDecimal examFee;
 
-
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

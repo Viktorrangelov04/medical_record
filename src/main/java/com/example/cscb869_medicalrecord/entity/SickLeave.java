@@ -19,5 +19,5 @@ public class SickLeave extends org.example.entity.BaseEntity {
     private int days;
     @OneToOne
     @JoinColumn(name = "examination_id", nullable = false)
-    private Visitations visitation;
+    private Visitation visitation;
 }

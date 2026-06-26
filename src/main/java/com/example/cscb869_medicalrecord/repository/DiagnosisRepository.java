@@ -4,4 +4,5 @@ import com.example.cscb869_medicalrecord.entity.Diagnosis;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
+    boolean existsByName(String name);
 }

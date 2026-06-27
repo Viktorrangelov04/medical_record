@@ -60,8 +60,6 @@ public class VisitationService {
         visitationRepository.deleteById(id);
     }
 
-    // ---- helpers ----
-
     private Visitation getOrThrow(Long id) {
         return visitationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Visitation not found: " + id));
@@ -86,11 +84,8 @@ public class VisitationService {
         visitation.setDiagnosis(diagnosis);
         visitation.setTreatment(request.treatment());
 
-        // --- БИЗНЕС ЛОГИКА ---
-        // 1. цената идва от таксата на лекаря
         visitation.setPrice(doctor.getExamFee());
 
-        // 2. кой плаща - според осигурителния статус на пациента
         Payer payer = patient.getInsuranceStatus() == HealthInsuranceStatus.INSURED
                 ? Payer.NZOK
                 : Payer.PATIENT;

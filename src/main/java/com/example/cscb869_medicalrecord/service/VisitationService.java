@@ -1,13 +1,12 @@
 package com.example.cscb869_medicalrecord.service;
 
+import com.example.cscb869_medicalrecord.config.SecurityUtils;
 import com.example.cscb869_medicalrecord.dto.VisitationRequest;
 import com.example.cscb869_medicalrecord.dto.VisitationResponse;
-import com.example.cscb869_medicalrecord.entity.Diagnosis;
-import com.example.cscb869_medicalrecord.entity.Doctor;
-import com.example.cscb869_medicalrecord.entity.Patient;
-import com.example.cscb869_medicalrecord.entity.Visitation;
+import com.example.cscb869_medicalrecord.entity.*;
 import com.example.cscb869_medicalrecord.enums.HealthInsuranceStatus;
 import com.example.cscb869_medicalrecord.enums.Payer;
+import com.example.cscb869_medicalrecord.enums.Role;
 import com.example.cscb869_medicalrecord.repository.DiagnosisRepository;
 import com.example.cscb869_medicalrecord.repository.DoctorRepository;
 import com.example.cscb869_medicalrecord.repository.PatientRepository;
@@ -23,15 +22,17 @@ public class VisitationService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final DiagnosisRepository diagnosisRepository;
-
+    private final SecurityUtils securityUtils;
     public VisitationService(VisitationRepository visitationRepository,
                              DoctorRepository doctorRepository,
                              PatientRepository patientRepository,
-                             DiagnosisRepository diagnosisRepository) {
+                             DiagnosisRepository diagnosisRepository,
+                             SecurityUtils securityUtils) {
         this.visitationRepository = visitationRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.diagnosisRepository = diagnosisRepository;
+        this.securityUtils = securityUtils;
     }
 
     public List<VisitationResponse> findAll() {
@@ -41,7 +42,19 @@ public class VisitationService {
     }
 
     public VisitationResponse findById(Long id) {
-        return toResponse(getOrThrow(id));
+        Visitation visitation = getOrThrow(id);
+        User currentUser = securityUtils.getCurrentUser();
+
+        if (currentUser.getRole() == Role.PATIENT) {
+            Long patientIdOfVisitation = visitation.getPatient().getId();
+            Long loggedInPatientId = currentUser.getPatient().getId();
+
+            if (!patientIdOfVisitation.equals(loggedInPatientId)) {
+                throw new RuntimeException("Access Denied: You cannot view other patients' records.");
+            }
+        }
+
+        return toResponse(visitation);
     }
 
     public VisitationResponse create(VisitationRequest request) {
@@ -52,6 +65,19 @@ public class VisitationService {
 
     public VisitationResponse update(Long id, VisitationRequest request) {
         Visitation visitation = getOrThrow(id);
+        User currentUser = securityUtils.getCurrentUser();
+
+        if (currentUser.getRole() == Role.DOCTOR) {
+            Long doctorIdOfVisitation = visitation.getDoctor().getId();
+            Long loggedInDoctorId = currentUser.getDoctor().getId();
+
+            if (!doctorIdOfVisitation.equals(loggedInDoctorId)) {
+                throw new RuntimeException("Access Denied: You can only edit your own visitations.");
+            }
+        } else if (currentUser.getRole() == Role.PATIENT) {
+            throw new RuntimeException("Access Denied: Patients cannot edit visitations.");
+        }
+
         applyRequest(visitation, request);
         return toResponse(visitationRepository.save(visitation));
     }

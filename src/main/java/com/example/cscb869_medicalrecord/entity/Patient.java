@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name="patients")
-public class Patient extends org.example.entity.BaseEntity {
+public class Patient extends BaseEntity {
     @Column(nullable = false)
     private String firstName;
 

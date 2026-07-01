@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name="specialty")
-public class Specialty extends org.example.entity.BaseEntity {
+public class Specialty extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String name;
 

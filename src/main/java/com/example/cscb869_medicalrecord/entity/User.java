@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name="users")
-public class User extends org.example.entity.BaseEntity {
+public class User extends BaseEntity {
     private String username;
     private String password;
 

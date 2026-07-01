@@ -1,4 +1,4 @@
-package org.example.entity;
+package com.example.cscb869_medicalrecord.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

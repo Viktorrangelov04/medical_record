@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name="visitations")
-public class Visitation extends org.example.entity.BaseEntity {
+public class Visitation extends BaseEntity {
     @Column(nullable = false)
     private LocalDate date;
 

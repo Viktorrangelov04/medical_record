@@ -6,10 +6,7 @@ import com.example.cscb869_medicalrecord.repository.SpecialtyRepository;
 import com.example.cscb869_medicalrecord.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes; // нов импорт
 
 import java.math.BigDecimal;
@@ -56,6 +53,12 @@ public class WebController {
         return "patients";
     }
 
+    @GetMapping("/doctors")
+    public String doctorsPage(Model model) {
+        model.addAttribute("doctors", doctorService.findAll());
+        return "doctors";
+    }
+
     @GetMapping("/reports")
     public String reportsPage(Model model) {
         model.addAttribute("totalRevenue", reportService.getTotalAmountPaidByPatients());
@@ -66,6 +69,22 @@ public class WebController {
         model.addAttribute("mostActiveMonth", reportService.getMostActiveMonthForSickLeaves());
         model.addAttribute("doctorsWithMostSickLeaves", reportService.getDoctorsWithMostSickLeaves());
         return "reports";
+    }
+
+    @GetMapping("/patients/{id}/visits")
+    public String patientHistory(@PathVariable Long id, Model model) {
+
+        model.addAttribute("patient", patientService.findById(id));
+        model.addAttribute("visits", reportService.getPatientVisitationHistory(id));
+
+        return "patient-visits";
+    }
+
+    @GetMapping("/doctors/{id}/visits")
+    public String doctorHistory(@PathVariable Long id, Model model) {
+        model.addAttribute("doctor", doctorService.findById(id));
+        model.addAttribute("visits", reportService.getDoctorVisitationHistory(id));
+        return "doctor-visits";
     }
 
     @GetMapping("/visitations/new")

@@ -26,7 +26,11 @@
             <tbody>
             <tr th:each="patient : ${patients}">
                 <td th:text="${patient.id}"></td>
-                <td th:text="${patient.fullName}"></td>
+                <td>
+                    <a th:href="@{'/web/patients/' + ${patient.id} + '/visits'}"
+                       th:text="${patient.fullName}">
+                    </a>
+                </td>
                 <td th:text="${patient.ssn}"></td>
                 <td th:text="${patient.doctorName}"></td>
                 <td>

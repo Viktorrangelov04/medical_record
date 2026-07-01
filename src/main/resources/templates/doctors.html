@@ -26,7 +26,11 @@
             <tbody>
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.id}"></td>
-                <td th:text="${doctor.firstName + ' ' + doctor.lastName}"></td>
+                <td>
+                    <a th:href="@{'/web/doctors/' + ${doctor.id} + '/visits'}"
+                       th:text="${doctor.fullName}">
+                    </a>
+                </td>
                 <td th:text="${doctor.uin}"></td>
                 <td th:text="${doctor.examFee + ' лв.'}"></td>
                 <td>

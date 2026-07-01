@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name="sick_leave")
-public class SickLeave extends org.example.entity.BaseEntity {
+public class SickLeave extends BaseEntity {
     @Column(nullable = false)
     private LocalDate startDate;
     @Column(nullable = false)

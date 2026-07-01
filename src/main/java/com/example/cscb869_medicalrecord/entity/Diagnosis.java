@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name="diagnosis")
-public class Diagnosis extends org.example.entity.BaseEntity {
+public class Diagnosis extends BaseEntity {
     @Column(nullable=false, unique = true)
     private String code;
     @Column(nullable=false)

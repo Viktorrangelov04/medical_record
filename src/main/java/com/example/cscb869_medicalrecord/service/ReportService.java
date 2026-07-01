@@ -86,6 +86,11 @@ public class ReportService {
                 .map(this::toVisitationResponse)
                 .toList();
     }
+    public List<VisitationResponse> getDoctorVisitationHistory(Long doctorId) {
+        return visitationRepository.findByDoctorId(doctorId).stream()
+                .map(this::toVisitationResponse)
+                .toList();
+    }
 
     public List<VisitationResponse> getVisitationsByDoctorAndPeriod(Long doctorId, LocalDate start, LocalDate end) {
         return visitationRepository.findVisitationsByDoctorAndPeriod(doctorId, start, end).stream()

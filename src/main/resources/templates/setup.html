@@ -17,14 +17,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
-    <!-- Известие за успех (Зелено) -->
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div class="row">
-        <!-- Навигационни табове вляво -->
         <div class="col-md-3">
             <div class="list-group shadow-sm" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="list-patient-list" data-bs-toggle="list" href="#list-patient" role="tab">Нов Пациент</a>
@@ -34,11 +32,8 @@
             </div>
         </div>
 
-        <!-- Съдържание на формите вдясно -->
         <div class="col-md-9">
             <div class="tab-content card border-0 shadow-sm p-4 bg-white" id="nav-tabContent">
-
-                <!-- ФОРМА 1: ПАЦИЕНТ -->
                 <div class="tab-pane fade show active" id="list-patient" role="tabpanel">
                     <h4 class="mb-4 text-success">Добавяне на Пациент</h4>
                     <form th:action="@{/web/patients/new}" method="post">
@@ -70,11 +65,10 @@
                                 <option value="UNINSURED">Неосигурен (плаща пациентът)</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Издай профил и акаунт</button>
+                        <button type="submit" class="btn btn-success w-100">Създай пациент</button>
                     </form>
                 </div>
 
-                <!-- ФОРМА 2: ЛЕКАР -->
                 <div class="tab-pane fade" id="list-doctor" role="tabpanel">
                     <h4 class="mb-4 text-info">Добавяне на Лекар</h4>
                     <form th:action="@{/web/doctors/new}" method="post">
@@ -93,20 +87,19 @@
                             <input type="text" class="form-control" name="uin" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Такса за преглед (лв.)</label>
+                            <label class="form-label">Такса за преглед (€)</label>
                             <input type="number" step="0.01" class="form-control" name="examFee" required>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label">Специалности (Изберете няколко с Ctrl/Cmd)</label>
+                            <label class="form-label">Специалности</label>
                             <select class="form-select" name="specialtyIds" multiple size="4">
                                 <option th:each="spec : ${specialties}" th:value="${spec.id}" th:text="${spec.name}"></option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-info text-white w-100">Издай профил и акаунт</button>
+                        <button type="submit" class="btn btn-info text-white w-100">Създай лекар</button>
                     </form>
                 </div>
 
-                <!-- ФОРМА 3: ДИАГНОЗА -->
                 <div class="tab-pane fade" id="list-diagnosis" role="tabpanel">
                     <h4 class="mb-4 text-warning">Добавяне на Диагноза</h4>
                     <form th:action="@{/web/diagnoses/new}" method="post">
@@ -115,14 +108,13 @@
                             <input type="text" class="form-control" name="name" required placeholder="напр. Остър бронхит">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Код на Диагнозата (МКБ-10)</label>
+                            <label class="form-label">Код на Диагнозата</label>
                             <input type="text" class="form-control" name="code" required placeholder="напр. J20">
                         </div>
-                        <button type="submit" class="btn btn-warning text-white w-100">Запиши в справочника</button>
+                        <button type="submit" class="btn btn-warning text-white w-100">Добави диагноза</button>
                     </form>
                 </div>
 
-                <!-- ФОРМА 4: СПЕЦИАЛНОСТ -->
                 <div class="tab-pane fade" id="list-specialty" role="tabpanel">
                     <h4 class="mb-4 text-dark">Добавяне на Специалност</h4>
                     <form th:action="@{/web/specialties/new}" method="post">
@@ -130,7 +122,7 @@
                             <label class="form-label">Име на Специалността</label>
                             <input type="text" class="form-control" name="name" required placeholder="напр. Кардиология">
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Запиши Специалност</button>
+                        <button type="submit" class="btn btn-dark w-100">Добави Специалност</button>
                     </form>
                 </div>
 

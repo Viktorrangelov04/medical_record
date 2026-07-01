@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ Панел - Настройки</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">Системен Ситап & Конфигурация</h2>
+        <a href="/web/home" class="btn btn-secondary">Назад към таблото</a>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Грешка: </strong> <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Известие за успех (Зелено) -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="row">
+        <!-- Навигационни табове вляво -->
+        <div class="col-md-3">
+            <div class="list-group shadow-sm" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action active" id="list-patient-list" data-bs-toggle="list" href="#list-patient" role="tab">Нов Пациент</a>
+                <a class="list-group-item list-group-item-action" id="list-doctor-list" data-bs-toggle="list" href="#list-doctor" role="tab">Нов Лекар</a>
+                <a class="list-group-item list-group-item-action" id="list-diagnosis-list" data-bs-toggle="list" href="#list-diagnosis" role="tab">Нова Диагноза</a>
+                <a class="list-group-item list-group-item-action" id="list-specialty-list" data-bs-toggle="list" href="#list-specialty" role="tab">Нова Специалност</a>
+            </div>
+        </div>
+
+        <!-- Съдържание на формите вдясно -->
+        <div class="col-md-9">
+            <div class="tab-content card border-0 shadow-sm p-4 bg-white" id="nav-tabContent">
+
+                <!-- ФОРМА 1: ПАЦИЕНТ -->
+                <div class="tab-pane fade show active" id="list-patient" role="tabpanel">
+                    <h4 class="mb-4 text-success">Добавяне на Пациент</h4>
+                    <form th:action="@{/web/patients/new}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Име</label>
+                                <input type="text" class="form-control" name="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Фамилия</label>
+                                <input type="text" class="form-control" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ЕГН</label>
+                            <input type="text" class="form-control" name="ssn" maxlength="10" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Личен Лекар</label>
+                            <select class="form-select" name="doctorId" required>
+                                <option value="" disabled selected>Изберете лекар...</option>
+                                <option th:each="doc : ${doctors}" th:value="${doc.id}" th:text="${'Д-р ' + doc.firstName + ' ' + doc.lastName}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Осигурителен статус</label>
+                            <select class="form-select" name="insuranceStatus" required>
+                                <option value="INSURED">Осигурен (плаща НЗОК)</option>
+                                <option value="UNINSURED">Неосигурен (плаща пациентът)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Издай профил и акаунт</button>
+                    </form>
+                </div>
+
+                <!-- ФОРМА 2: ЛЕКАР -->
+                <div class="tab-pane fade" id="list-doctor" role="tabpanel">
+                    <h4 class="mb-4 text-info">Добавяне на Лекар</h4>
+                    <form th:action="@{/web/doctors/new}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Име</label>
+                                <input type="text" class="form-control" name="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Фамилия</label>
+                                <input type="text" class="form-control" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">УИН</label>
+                            <input type="text" class="form-control" name="uin" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Такса за преглед (лв.)</label>
+                            <input type="number" step="0.01" class="form-control" name="examFee" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Специалности (Изберете няколко с Ctrl/Cmd)</label>
+                            <select class="form-select" name="specialtyIds" multiple size="4">
+                                <option th:each="spec : ${specialties}" th:value="${spec.id}" th:text="${spec.name}"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-info text-white w-100">Издай профил и акаунт</button>
+                    </form>
+                </div>
+
+                <!-- ФОРМА 3: ДИАГНОЗА -->
+                <div class="tab-pane fade" id="list-diagnosis" role="tabpanel">
+                    <h4 class="mb-4 text-warning">Добавяне на Диагноза</h4>
+                    <form th:action="@{/web/diagnoses/new}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Име на Диагнозата</label>
+                            <input type="text" class="form-control" name="name" required placeholder="напр. Остър бронхит">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Код на Диагнозата (МКБ-10)</label>
+                            <input type="text" class="form-control" name="code" required placeholder="напр. J20">
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white w-100">Запиши в справочника</button>
+                    </form>
+                </div>
+
+                <!-- ФОРМА 4: СПЕЦИАЛНОСТ -->
+                <div class="tab-pane fade" id="list-specialty" role="tabpanel">
+                    <h4 class="mb-4 text-dark">Добавяне на Специалност</h4>
+                    <form th:action="@{/web/specialties/new}" method="post">
+                        <div class="mb-4">
+                            <label class="form-label">Име на Специалността</label>
+                            <input type="text" class="form-control" name="name" required placeholder="напр. Кардиология">
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Запиши Специалност</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var activeTab = /*[[${activeTab}]]*/ null;
+
+        if (activeTab) {
+            var tabEl = document.querySelector('#list-' + activeTab + '-list');
+            if (tabEl) {
+                var tab = new bootstrap.Tab(tabEl);
+                tab.show();
+            }
+        }
+    });
+</script>
+</body>
+</html>

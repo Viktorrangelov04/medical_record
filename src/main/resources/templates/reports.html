@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Справки и Статистики</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">Медицинска Статистика & Справки</h2>
+        <a href="/web/home" class="btn btn-secondary">Назад към таблото</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm bg-success text-white p-3 text-center h-100">
+                <h5>Общо платени от пациенти</h5>
+                <h2 class="fw-bold mt-2" th:text="${totalRevenue + ' лв.'}">0 лв.</h2>
+                <small class="opacity-75">Сума от неосигурени прегледи</small>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm bg-info text-white p-3 text-center h-100">
+                <h5>Най-често срещана диагноза</h5>
+                <h2 class="fw-bold mt-2" th:text="${mostCommonDiagnosis != null ? mostCommonDiagnosis.name : 'Няма данни'}">-</h2>
+
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm bg-danger text-white p-3 text-center h-100">
+                <h5>Месец с най-много болнични листa</h5>
+                <h3 class="fw-bold mt-2" th:if="${mostActiveMonth != null}">
+                    Месец: <span th:text="${mostActiveMonth.monthValue}"></span>
+                    (<span th:text="${mostActiveMonth.count}"></span> бр.)
+                </h3>
+                <h3 class="fw-bold mt-2" th:unless="${mostActiveMonth != null}">Няма данни</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm p-4 bg-white h-100">
+                <h5 class="text-secondary fw-bold mb-3">Брой пациенти при всеки GP</h5>
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr><th>Лекар</th><th class="text-end">Пациенти</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row : ${patientCountPerDoctor}">
+                        <td th:text="${row.doctorName}"></td>
+                        <td class="text-end fw-bold" th:text="${row.count}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm p-4 bg-white h-100">
+                <h5 class="text-secondary fw-bold mb-3">Брой посещения при всеки лекар</h5>
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr><th>Лекар</th><th class="text-end">Посещения</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row : ${visitationCountPerDoctor}">
+                        <td th:text="${row.doctorName}"></td>
+                        <td class="text-end fw-bold" th:text="${row.count}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -7,5 +7,8 @@ public record VisitationRequest(
         Long doctorId,
         Long patientId,
         Long diagnosisId,
-        String treatment
+        String treatment,
+        boolean borderSickLeave,
+        LocalDate sickLeaveStartDate,
+        Integer sickLeaveDays
 ) {}

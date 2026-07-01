@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Електронно Медицинско Досие</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="#">Медицинско Досие</a>
+        <div class="navbar-nav ms-auto">
+            <a class="btn btn-outline-light btn-sm" href="/logout">Изход</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-primary">Добре дошли в ЕМД системата</h1>
+            <p class="col-md-8 fs-4 text-muted">Управлявайте бързо и сигурно медицински досиета, прегледи, болнични и справки.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Пациенти</h5>
+                    <p class="card-text text-muted">Списък на регистрираните пациенти, ЕГН-та и лични лекари.</p>
+                    <a href="/web/patients" class="btn btn-success">Преглед на пациенти</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-info">Лекари</h5>
+                    <p class="card-text text-muted">Информация за лекари, специалности и такси за прегледи.</p>
+                    <a href="/web/doctors" class="btn btn-info text-white">Преглед на лекари</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Справки & Статистика</h5>
+                    <p class="card-text text-muted">Финансови отчети, най-чести диагнози и натовареност на лекари.</p>
+                    <a href="/web/reports" class="btn btn-warning text-white">Преглед на справки</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Нов преглед</h5>
+                    <p class="card-text text-muted">Създаване на нов преглед.</p>
+                    <a href="/web/visitations/new" class="btn btn-primary btn-lg px-4 gap-3 mt-3">Добави нов преглед</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Админ панел</h5>
+                    <p class="card-text text-muted">Създаване на нови пациенти, доктори и диагнози</p>
+                    <a class="btn btn-danger btn-sm me-2" href="/web/setup">Админ Панел / Setup</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

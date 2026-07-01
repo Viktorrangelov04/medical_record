@@ -7,10 +7,7 @@ import com.example.cscb869_medicalrecord.entity.*;
 import com.example.cscb869_medicalrecord.enums.HealthInsuranceStatus;
 import com.example.cscb869_medicalrecord.enums.Payer;
 import com.example.cscb869_medicalrecord.enums.Role;
-import com.example.cscb869_medicalrecord.repository.DiagnosisRepository;
-import com.example.cscb869_medicalrecord.repository.DoctorRepository;
-import com.example.cscb869_medicalrecord.repository.PatientRepository;
-import com.example.cscb869_medicalrecord.repository.VisitationRepository;
+import com.example.cscb869_medicalrecord.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,17 +19,22 @@ public class VisitationService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final DiagnosisRepository diagnosisRepository;
+    private final SickLeaveRepository sickLeaveRepository;
     private final SecurityUtils securityUtils;
+
     public VisitationService(VisitationRepository visitationRepository,
                              DoctorRepository doctorRepository,
                              PatientRepository patientRepository,
                              DiagnosisRepository diagnosisRepository,
-                             SecurityUtils securityUtils) {
+                             SickLeaveRepository sickLeaveRepository,
+                             SecurityUtils securityUtils
+                             ) {
         this.visitationRepository = visitationRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.diagnosisRepository = diagnosisRepository;
         this.securityUtils = securityUtils;
+        this.sickLeaveRepository = sickLeaveRepository;
     }
 
     public List<VisitationResponse> findAll() {
@@ -60,7 +62,17 @@ public class VisitationService {
     public VisitationResponse create(VisitationRequest request) {
         Visitation visitation = new Visitation();
         applyRequest(visitation, request);
-        return toResponse(visitationRepository.save(visitation));
+        Visitation savedVisitation = visitationRepository.save(visitation);
+
+        if (request.borderSickLeave() && request.sickLeaveStartDate() != null && request.sickLeaveDays() != null) {
+            SickLeave sickLeave = new SickLeave();
+            sickLeave.setStartDate(request.sickLeaveStartDate());
+            sickLeave.setDays(request.sickLeaveDays());
+            sickLeave.setVisitation(savedVisitation);
+            sickLeaveRepository.save(sickLeave);
+        }
+
+        return toResponse(savedVisitation);
     }
 
     public VisitationResponse update(Long id, VisitationRequest request) {

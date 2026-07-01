@@ -53,6 +53,7 @@ public class DiagnosisService {
 
     private void applyRequest(Diagnosis diagnosis, DiagnosisRequest request) {
         diagnosis.setName(request.name());
+        diagnosis.setCode(request.code());
     }
 
     private DiagnosisResponse toResponse(Diagnosis d) {

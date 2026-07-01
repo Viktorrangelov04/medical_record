@@ -14,8 +14,6 @@ public class Cscb869MedicalrecordApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Cscb869MedicalrecordApplication.class, args);
-
-
 	}
 
 	@Bean

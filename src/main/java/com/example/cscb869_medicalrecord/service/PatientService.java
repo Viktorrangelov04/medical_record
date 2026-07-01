@@ -4,8 +4,12 @@ import com.example.cscb869_medicalrecord.dto.PatientRequest;
 import com.example.cscb869_medicalrecord.dto.PatientResponse;
 import com.example.cscb869_medicalrecord.entity.Doctor;
 import com.example.cscb869_medicalrecord.entity.Patient;
+import com.example.cscb869_medicalrecord.entity.User;
+import com.example.cscb869_medicalrecord.enums.Role;
 import com.example.cscb869_medicalrecord.repository.DoctorRepository;
 import com.example.cscb869_medicalrecord.repository.PatientRepository;
+import com.example.cscb869_medicalrecord.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +18,17 @@ import java.util.List;
 public class PatientService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public PatientService(PatientRepository patientRepository,
-                          DoctorRepository doctorRepository) {
+                          DoctorRepository doctorRepository,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<PatientResponse> findAll() {
@@ -39,7 +49,16 @@ public class PatientService {
         }
         Patient patient = new Patient();
         applyRequest(patient, request);
-        return toResponse(patientRepository.save(patient));
+        patient = patientRepository.save(patient);
+
+        User user = new User();
+        user.setUsername(patient.getSsn());
+        user.setPassword(passwordEncoder.encode("patient123"));
+        user.setRole(Role.PATIENT);
+        user.setPatient(patient);
+        userRepository.save(user);
+
+        return toResponse(patient);
     }
 
     public PatientResponse update(Long id, PatientRequest request) {

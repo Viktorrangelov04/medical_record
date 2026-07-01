@@ -5,8 +5,12 @@ import com.example.cscb869_medicalrecord.dto.DoctorResponse;
 import com.example.cscb869_medicalrecord.dto.SpecialtyResponse;
 import com.example.cscb869_medicalrecord.entity.Doctor;
 import com.example.cscb869_medicalrecord.entity.Specialty;
+import com.example.cscb869_medicalrecord.entity.User;
+import com.example.cscb869_medicalrecord.enums.Role;
 import com.example.cscb869_medicalrecord.repository.DoctorRepository;
 import com.example.cscb869_medicalrecord.repository.SpecialtyRepository;
+import com.example.cscb869_medicalrecord.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,11 +22,17 @@ import java.util.stream.Collectors;
 public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final SpecialtyRepository specialtyRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DoctorService(DoctorRepository doctorRepository,
-                         SpecialtyRepository specialtyRepository) {
+                         SpecialtyRepository specialtyRepository,
+                         UserRepository userRepository,
+                         PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
         this.specialtyRepository = specialtyRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<DoctorResponse> findAll() {
@@ -43,7 +53,14 @@ public class DoctorService {
         }
         Doctor doctor = new Doctor();
         applyRequest(doctor, request);
-        return toResponse(doctorRepository.save(doctor));
+        doctor = doctorRepository.save(doctor);
+
+        User user = new User();
+        user.setUsername(doctor.getUin());
+        user.setPassword(passwordEncoder.encode("doctor123"));
+        user.setRole(Role.DOCTOR);
+        userRepository.save(user);
+        return toResponse(doctor);
     }
 
     public DoctorResponse update(Long id, DoctorRequest request) {

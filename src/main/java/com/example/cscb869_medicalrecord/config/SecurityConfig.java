@@ -25,9 +25,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/api/reports/**").hasAnyRole("DOCTOR", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/web/home", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout.logoutSuccessUrl("/login").permitAll());
         return http.build();
     }
 }

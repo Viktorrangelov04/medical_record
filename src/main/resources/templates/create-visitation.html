@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Нов Преглед</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow border-0 p-4 bg-white">
+        <h3 class="text-primary fw-bold mb-4">Въвеждане на нов преглед</h3>
+
+        <form th:action="@{/web/visitations/new}" method="post">
+            <div class="mb-3">
+                <label for="date" class="form-label">Дата на прегледа</label>
+                <input type="date" class="form-control" id="date" name="date" required th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+            </div>
+
+            <div class="mb-3">
+                <label for="patientId" class="form-label">Пациент</label>
+                <select class="form-select" id="patientId" name="patientId" required>
+                    <option value="" disabled selected>Изберете пациент</option>
+                    <option th:each="patient : ${patients}" th:value="${patient.id}"
+                            th:text="${patient.fullName + ' (ЕГН: ' + patient.ssn + ')'}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="doctorId" class="form-label">Извършил прегледа лекар</label>
+                <select class="form-select" id="doctorId" name="doctorId" required>
+                    <option value="" disabled selected>Изберете лекар</option>
+                    <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
+                            th:text="${'Д-р ' + doctor.firstName + ' ' + doctor.lastName + ' (Такса: ' + doctor.examFee + ' лв.)'}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="diagnosisId" class="form-label">Диагноза</label>
+                <select class="form-select" id="diagnosisId" name="diagnosisId">
+                    <option value="">Няма установена диагноза (профилактичен)</option>
+                    <option th:each="diag : ${diagnoses}" th:value="${diag.id}" th:text="${diag.name}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="treatment" class="form-label">Назначено Лечение</label>
+                <textarea class="form-control" id="treatment" name="treatment" rows="3" placeholder="Опишете лекарствата, терапията..." required></textarea>
+            </div>
+
+            <div class="card p-3 mb-4 bg-light border-0">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="borderSickLeave" name="borderSickLeave" onchange="toggleSickLeaveFields()">
+                    <label class="form-check-label fw-bold text-dark" for="borderSickLeave">
+                        Издаване на болничен лист към прегледа
+                    </label>
+                </div>
+
+                <div id="sickLeaveFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="sickLeaveStartDate" class="form-label form-label-sm">Начална дата</label>
+                            <input type="date" class="form-control form-control-sm" id="sickLeaveStartDate" name="sickLeaveStartDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sickLeaveDays" class="form-label form-label-sm">Брой дни</label>
+                            <input type="number" class="form-control form-control-sm" id="sickLeaveDays" name="sickLeaveDays" min="1" placeholder="напр. 5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between">
+                <a href="/web/home" class="btn btn-secondary">Отказ</a>
+                <button type="submit" class="btn btn-primary">Запиши Преглед</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+<script>
+    function toggleSickLeaveFields() {
+        var checkBox = document.getElementById("borderSickLeave");
+        var fieldsDiv = document.getElementById("sickLeaveFields");
+        var startDateInput = document.getElementById("sickLeaveStartDate");
+        var daysInput = document.getElementById("sickLeaveDays");
+
+        if (checkBox.checked == true) {
+            fieldsDiv.style.display = "block";
+            startDateInput.required = true;
+            daysInput.required = true;
+        } else {
+            fieldsDiv.style.display = "none";
+            startDateInput.required = false;
+            daysInput.required = false;
+            startDateInput.value = "";
+            daysInput.value = "";
+        }
+    }
+</script>
+</body>
+</html>
